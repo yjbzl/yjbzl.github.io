@@ -47,20 +47,6 @@
 
   
   <url>
-    <loc>https://allints.github.io/tags/hello-world/</loc>
-    <lastmod>2023-09-07</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://allints.github.io/tags/blog/</loc>
-    <lastmod>2023-09-07</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
     <loc>https://allints.github.io/tags/redis/</loc>
     <lastmod>2023-09-07</lastmod>
     <changefreq>weekly</changefreq>
@@ -77,14 +63,14 @@
 
   
   <url>
-    <loc>https://allints.github.io/categories/init/</loc>
+    <loc>https://allints.github.io/categories/redis/</loc>
     <lastmod>2023-09-07</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>https://allints.github.io/categories/redis/</loc>
+    <loc>https://allints.github.io/categories/%E6%9D%82%E8%B0%88/</loc>
     <lastmod>2023-09-07</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>

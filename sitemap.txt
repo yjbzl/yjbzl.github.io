@@ -3,9 +3,7 @@ https://allints.github.io/2023/09/06/%E3%80%8ARedis%E5%AD%A6%E4%B9%A0%E7%AC%94%E
 https://allints.github.io/tags/index.html
 https://allints.github.io/categories/index.html
 https://allints.github.io/
-https://allints.github.io/tags/hello-world/
-https://allints.github.io/tags/blog/
 https://allints.github.io/tags/redis/
 https://allints.github.io/tags/%E6%BA%90%E7%A0%81/
-https://allints.github.io/categories/init/
 https://allints.github.io/categories/redis/
+https://allints.github.io/categories/%E6%9D%82%E8%B0%88/
