@@ -1,24 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>《Redis学习笔记》（一）简介</title>
+    <url>/2023/09/06/%E3%80%8ARedis%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E3%80%8B%EF%BC%88%E4%B8%80%EF%BC%89%E7%AE%80%E4%BB%8B/</url>
+    <content><![CDATA[<p>Redis在日常工作中使用很多，但很多时候都仅仅是会使用，知其然而不知其所以然。这个系列不会对Redis的使用做过多的介绍，主要针对Redis的源码和底层逻辑做下简单介绍，不保证理解的完全准确。</p>
+<p>Redis是以Key-Value的形式保存数据的，而Key都是以字符串的形式保存，主要的区分在于Value的数据格式。</p>
+<p><strong>约定</strong>：本系列以Redis 3.0.0版本分析，不同的Redis版本实现可能会不一样，但主要原理是变化不大的。</p>
+<span id="more"></span>
+]]></content>
+      <categories>
+        <category>中间件</category>
+        <category>redis</category>
+      </categories>
+      <tags>
+        <tag>redis</tag>
+        <tag>中间件</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>开篇</title>
-    <url>/2023/09/06/hello-world/</url>
+    <url>/2023/09/06/%E5%BC%80%E7%AF%87/</url>
     <content><![CDATA[<p>最近在看一些技术书记，很多内容基本属于看完就忘。以前看过的知识点，在日常工作中没有用到，过一段时间也慢慢忘了。搭建这个博客，主要是想记录一些看书笔记，方便以后复习，算是个记录的地方吧。希望能坚持下去，fighting！</p>
 ]]></content>
       <categories>
         <category>杂谈</category>
       </categories>
-  </entry>
-  <entry>
-    <title>《Redis学习笔记》数据结构（1）--SDS</title>
-    <url>/2023/09/06/%E3%80%8ARedis%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E3%80%8B%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%EF%BC%881%EF%BC%89-SDS/</url>
-    <content><![CDATA[]]></content>
-      <categories>
-        <category>redis</category>
-      </categories>
-      <tags>
-        <tag>redis</tag>
-        <tag>源码</tag>
-      </tags>
   </entry>
 </search>
