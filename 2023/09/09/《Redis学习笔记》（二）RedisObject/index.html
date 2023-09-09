@@ -20,19 +20,21 @@
     var CONFIG = {"hostname":"allints.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
-  <meta name="description" content="&amp;emsp;&amp;emsp;最近在看一些技术书籍，感觉很多知识点光看而没有应用，很容易忘记。后面再次复习的时候，又从头看起，抓不住重点，而且书中复杂或者繁琐的知识点会再次花费比较多的精力去理解，去思考。平时遇到不懂的问题，在找到方案以后也没有系统记录。而在寻找答案过程中发现有很多人的博客写的很好，分析问题既全面又深入，让我再次有了写博客的念头。以前也有想过写博客，把工作中遇到的问题和平时的学习笔记记录">
+  <meta name="description" content="&amp;emsp;&amp;emsp;Redis使用统一的对象RedisObject来表示五种基本数据类型，RedisObject的数据结构定义： 12345678910111213141516171819202122232425262728293031323334&#x2F;* Object types *&#x2F;#define REDIS_STRING 0#define REDIS_LIST 1#define REDIS_">
 <meta property="og:type" content="article">
-<meta property="og:title" content="开篇">
-<meta property="og:url" content="https://allints.github.io/2023/09/06/%E5%BC%80%E7%AF%87/index.html">
+<meta property="og:title" content="《Redis学习笔记》（二）RedisObject">
+<meta property="og:url" content="https://allints.github.io/2023/09/09/%E3%80%8ARedis%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E3%80%8B%EF%BC%88%E4%BA%8C%EF%BC%89RedisObject/index.html">
 <meta property="og:site_name" content="雨季不再来">
-<meta property="og:description" content="&amp;emsp;&amp;emsp;最近在看一些技术书籍，感觉很多知识点光看而没有应用，很容易忘记。后面再次复习的时候，又从头看起，抓不住重点，而且书中复杂或者繁琐的知识点会再次花费比较多的精力去理解，去思考。平时遇到不懂的问题，在找到方案以后也没有系统记录。而在寻找答案过程中发现有很多人的博客写的很好，分析问题既全面又深入，让我再次有了写博客的念头。以前也有想过写博客，把工作中遇到的问题和平时的学习笔记记录">
+<meta property="og:description" content="&amp;emsp;&amp;emsp;Redis使用统一的对象RedisObject来表示五种基本数据类型，RedisObject的数据结构定义： 12345678910111213141516171819202122232425262728293031323334&#x2F;* Object types *&#x2F;#define REDIS_STRING 0#define REDIS_LIST 1#define REDIS_">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2023-09-06T12:57:26.537Z">
-<meta property="article:modified_time" content="2023-09-08T13:42:24.367Z">
+<meta property="article:published_time" content="2023-09-09T03:17:37.000Z">
+<meta property="article:modified_time" content="2023-09-09T12:25:22.447Z">
 <meta property="article:author" content="雨季不再来">
+<meta property="article:tag" content="redis">
+<meta property="article:tag" content="中间件">
 <meta name="twitter:card" content="summary">
 
-<link rel="canonical" href="https://allints.github.io/2023/09/06/%E5%BC%80%E7%AF%87/">
+<link rel="canonical" href="https://allints.github.io/2023/09/09/%E3%80%8ARedis%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E3%80%8B%EF%BC%88%E4%BA%8C%EF%BC%89RedisObject/">
 
 
 <script id="page-configurations">
@@ -45,7 +47,7 @@
   };
 </script>
 
-  <title>开篇 | 雨季不再来</title>
+  <title>《Redis学习笔记》（二）RedisObject | 雨季不再来</title>
   
 
 
@@ -195,7 +197,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://allints.github.io/2023/09/06/%E5%BC%80%E7%AF%87/">
+    <link itemprop="mainEntityOfPage" href="https://allints.github.io/2023/09/09/%E3%80%8ARedis%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E3%80%8B%EF%BC%88%E4%BA%8C%EF%BC%89RedisObject/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.jpg">
@@ -208,7 +210,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          开篇
+          《Redis学习笔记》（二）RedisObject
         </h1>
 
         <div class="post-meta">
@@ -217,23 +219,21 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
+              
 
-              <time title="创建时间：2023-09-06 20:57:26" itemprop="dateCreated datePublished" datetime="2023-09-06T20:57:26+08:00">2023-09-06</time>
+              <time title="创建时间：2023-09-09 11:17:37 / 修改时间：20:25:22" itemprop="dateCreated datePublished" datetime="2023-09-09T11:17:37+08:00">2023-09-09</time>
             </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2023-09-08 21:42:24" itemprop="dateModified" datetime="2023-09-08T21:42:24+08:00">2023-09-08</time>
-              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="far fa-folder"></i>
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%9D%82%E8%B0%88/" itemprop="url" rel="index"><span itemprop="name">杂谈</span></a>
+                  <a href="/categories/%E4%B8%AD%E9%97%B4%E4%BB%B6/" itemprop="url" rel="index"><span itemprop="name">中间件</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E4%B8%AD%E9%97%B4%E4%BB%B6/%E3%80%8ARedis%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E3%80%8B/" itemprop="url" rel="index"><span itemprop="name">《Redis学习笔记》</span></a>
                 </span>
             </span>
 
@@ -243,14 +243,14 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>428</span>
+              <span>1.9k</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
                 <i class="far fa-clock"></i>
               </span>
                 <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>1 分钟</span>
+              <span>2 分钟</span>
             </span>
 
         </div>
@@ -262,15 +262,68 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>&emsp;&emsp;最近在看一些技术书籍，感觉很多知识点光看而没有应用，很容易忘记。后面再次复习的时候，又从头看起，抓不住重点，而且书中复杂或者繁琐的知识点会再次花费比较多的精力去理解，去思考。平时遇到不懂的问题，在找到方案以后也没有系统记录。而在寻找答案过程中发现有很多人的博客写的很好，分析问题既全面又深入，让我再次有了写博客的念头。以前也有想过写博客，把工作中遇到的问题和平时的学习笔记记录下来，有个系统归纳的地方。但是总是怕自己写的不够好，不够深入，所以一直没有行动起来。现在想想，写博客主要是方便自己学习和记录，在写的过程中，不断加深理解，也会锻炼自己的书写能力。不积跬步无以至千里，不积小流二无以成江海。</p>
-<p>&emsp;&emsp;这个博客可能主要包括以下几个方面的内容：</p>
+        <p>&emsp;&emsp;Redis使用统一的对象RedisObject来表示五种基本数据类型，RedisObject的数据结构定义：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* Object types */</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> REDIS_STRING 0</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> REDIS_LIST 1</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> REDIS_SET 2</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> REDIS_ZSET 3</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> REDIS_HASH 4</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/* Objects encoding. Some kind of objects like Strings and Hashes can be</span></span><br><span class="line"><span class="comment"> * internally represented in multiple ways. The &#x27;encoding&#x27; field of the object</span></span><br><span class="line"><span class="comment"> * is set to one of this fields for this object. */</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> REDIS_ENCODING_RAW 0     <span class="comment">/* Raw representation */</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> REDIS_ENCODING_INT 1     <span class="comment">/* Encoded as integer */</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> REDIS_ENCODING_HT 2      <span class="comment">/* Encoded as hash table */</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> REDIS_ENCODING_ZIPMAP 3  <span class="comment">/* Encoded as zipmap */</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> REDIS_ENCODING_LINKEDLIST 4 <span class="comment">/* Encoded as regular linked list */</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> REDIS_ENCODING_ZIPLIST 5 <span class="comment">/* Encoded as ziplist */</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> REDIS_ENCODING_INTSET 6  <span class="comment">/* Encoded as intset */</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> REDIS_ENCODING_SKIPLIST 7  <span class="comment">/* Encoded as skiplist */</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> REDIS_ENCODING_EMBSTR 8  <span class="comment">/* Embedded sds string encoding */</span></span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">/* A redis object, that is a type able to hold a string / list / set */</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/* The actual Redis Object */</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> REDIS_LRU_BITS 24</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> REDIS_LRU_CLOCK_MAX ((1<span class="string">&lt;&lt;REDIS_LRU_BITS)-1) /* Max value of obj-&gt;</span>lru */</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> REDIS_LRU_CLOCK_RESOLUTION 1000 <span class="comment">/* LRU clock resolution in ms */</span></span></span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">redisObject</span> &#123;</span></span><br><span class="line">    <span class="type">unsigned</span> type:<span class="number">4</span>;</span><br><span class="line">    <span class="type">unsigned</span> encoding:<span class="number">4</span>;</span><br><span class="line">    <span class="type">unsigned</span> lru:REDIS_LRU_BITS; <span class="comment">/* lru time (relative to server.lruclock) */</span></span><br><span class="line">    <span class="type">int</span> refcount;</span><br><span class="line">    <span class="type">void</span> *ptr;</span><br><span class="line">&#125; robj;</span><br></pre></td></tr></table></figure>
+
+<span id="more"></span>
+
+<p>&emsp;&emsp;RedisObject对象字段说明：</p>
 <ul>
-<li>看书学习笔记</li>
-<li>工作中碰到的问题点、学到的工作技巧、或者一些有利于提升效率的方案等</li>
-<li>热门话题的感触或者简介，比如GPT</li>
-<li>……</li>
+<li>type 对象的数据类型，占4bit，取值有五种：OBJ_STRING，OBJ_LIST，OBJ_SET，OBJ_ZSET，OBJ_HASH。分别代表五种数据类型字符串，列表，集合，有序集合，哈希。</li>
+<li>encoding 编码，代表对象的内部实现方式，占4bit。</li>
+<li>lru LRU算法清除内存中的对象，占24bit</li>
+<li>refcount 引用计数，占4byte</li>
+<li>ptr 数据指针，指向具体的数据对象。比如string类型，ptr可能指向一个SDS结构的数据</li>
 </ul>
-<p>&emsp;&emsp;让我们开始，希望能一直坚持下去！</p>
+<p>&emsp;&emsp;RedisObject不包含ptr指向的具体数据对象，一共占用的内存：</p>
+<blockquote>
+<p>4bit+4bit+24bit+4byte+8byte&#x3D;16byte</p>
+</blockquote>
+<p>&emsp;&emsp;Redis每种编码方式对应一种具体的数据结构</p>
+<table>
+<thead>
+<tr>
+<th>编码常量</th>
+<th>具体的数据结构</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>REDIS_ENCODING_RAW</td>
+<td>简单动态字符串</td>
+</tr>
+<tr>
+<td>REDIS_ENCODING_INT</td>
+<td>long类型的整数</td>
+</tr>
+<tr>
+<td>REDIS_ENCODING_HT</td>
+<td>字典</td>
+</tr>
+<tr>
+<td>REDIS_ENCODING_ZIPMAP</td>
+<td>历史遗留常量，已不再使用</td>
+</tr>
+<tr>
+<td>REDIS_ENCODING_LINKEDLIST</td>
+<td>双向链表</td>
+</tr>
+<tr>
+<td>REDIS_ENCODING_ZIPLIST</td>
+<td>压缩列表</td>
+</tr>
+<tr>
+<td>REDIS_ENCODING_INTSET</td>
+<td>整数集合</td>
+</tr>
+<tr>
+<td>REDIS_ENCODING_SKIPLIST</td>
+<td>跳跃表</td>
+</tr>
+<tr>
+<td>REDIS_ENCODING_EMBSTR</td>
+<td>embstr编码的简单动态字符串</td>
+</tr>
+</tbody></table>
 
     </div>
 
@@ -279,16 +332,23 @@
     
 
       <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/redis/" rel="tag"># redis</a>
+              <a href="/tags/%E4%B8%AD%E9%97%B4%E4%BB%B6/" rel="tag"># 中间件</a>
+          </div>
 
         
 
 
         
     <div class="post-nav">
-      <div class="post-nav-item"></div>
       <div class="post-nav-item">
-    <a href="/2023/09/06/%E3%80%8ARedis%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E3%80%8B%EF%BC%88%E4%B8%80%EF%BC%89Redis%E4%BB%8B%E7%BB%8D/" rel="next" title="《Redis学习笔记》（一）Redis介绍">
-      《Redis学习笔记》（一）Redis介绍 <i class="fa fa-chevron-right"></i>
+    <a href="/2023/09/06/%E3%80%8ARedis%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E3%80%8B%EF%BC%88%E4%B8%80%EF%BC%89Redis%E4%BB%8B%E7%BB%8D/" rel="prev" title="《Redis学习笔记》（一）Redis介绍">
+      <i class="fa fa-chevron-left"></i> 《Redis学习笔记》（一）Redis介绍
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2023/09/09/%E3%80%8ARedis%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E3%80%8B%EF%BC%88%E4%B8%89%EF%BC%89%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84SDS/" rel="next" title="《Redis学习笔记》（三）数据结构SDS">
+      《Redis学习笔记》（三）数据结构SDS <i class="fa fa-chevron-right"></i>
     </a></div>
     </div>
       </footer>
